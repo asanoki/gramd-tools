@@ -40,7 +40,6 @@ public:
 		m_data.imbue(std::locale("C"));
 		if (!m_data.good())
 			return -1;
-		m_data.seekg(0, std::ios::end);
 		std::string raw_line;
 		std::wstring line;
 		int line_value;
