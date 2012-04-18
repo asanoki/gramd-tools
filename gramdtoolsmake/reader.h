@@ -16,11 +16,16 @@
 #include "../common/encoding.h"
 #include "../common/log.h"
 
+namespace jovislab {
+namespace gramd {
+namespace tools {
+namespace make {
+
 class Reader {
 private:
 	std::vector<std::string> m_filenames;
 	std::vector<std::string>::iterator m_iterator;
-	boost::shared_ptr<boost::progress_display> m_progress_display;
+	boost::shared_ptr<boost::wprogress_display> m_progress_display;
 	std::ifstream m_data;
 	size_t m_input_size;
 	int m_data_pos;
@@ -61,28 +66,34 @@ public:
 		}
 		m_data_pos = 0;
 		m_data_pos_local = 0;
-		m_progress_display.reset(
-				new boost::progress_display(m_input_size));
 		m_iterator = m_filenames.begin();
 		open(*m_iterator);
 		m_iterator++;
 		return 0;
 	}
-	std::wstring readLine() {
+	std::string readLine() {
 		boost::mutex::scoped_lock lock(m_mutex);
+		DEBUG("Reader::readLine: Begin.");
 		std::string raw_line;
 		std::wstring line;
+
+		if (m_progress_display.get() == NULL) {
+			m_progress_display.reset(
+					new boost::wprogress_display(m_input_size));
+		}
 
 		if (m_data.eof()) {
 			m_data.close();
 			if (m_iterator == m_filenames.end()) {
-				return L"";
+				DEBUG("Reader::readLine: End. No more data.");
+				return "";
 			}
 			m_iterator++;
 			open(*m_iterator);
 		}
 
 		while (raw_line.empty() && !m_data.eof()) {
+			DEBUG("Reader::readLine: Reading line...");
 			std::getline(m_data, raw_line);
 			m_data_pos_local += raw_line.length();
 			m_data_pos += raw_line.length();
@@ -93,20 +104,18 @@ public:
 			boost::algorithm::trim(raw_line);
 		}
 
-		wchar_t *wchar_buffer = new wchar_t[raw_line.length() + 1];
-		encoding::importAsUtf8(wchar_buffer, raw_line.c_str(),
-				raw_line.length() + 1/* Check off by one for \0 */,
-				raw_line.length() + 1);
-		line = wchar_buffer;
-
-		delete[] wchar_buffer;
-		return line;
+		DEBUG("Reader::readLine: End. Returning a line.");
+		return raw_line;
 	}
 	void close() {
 //		m_progress_display.reset();
-		m_progress_display.reset(
-				new boost::progress_display(m_input_size));
+		m_progress_display.reset();//new boost::progress_display(m_input_size));
 	}
 };
+
+}
+}
+}
+}
 
 #endif /* READER_H_ */

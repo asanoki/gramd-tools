@@ -16,6 +16,11 @@
 #include "../common/encoding.h"
 #include "../common/log.h"
 
+namespace jovislab {
+namespace gramd {
+namespace tools {
+namespace make {
+
 class Filter {
 private:
 	std::string m_filename;
@@ -60,6 +65,7 @@ public:
 					raw_line.length() + 1/* Check off by one for \0 */,
 					raw_line.length() + 1);
 			line = wchar_buffer;
+			
 			m_regexes.push_back(boost::wregex(line));
 			delete[] wchar_buffer;
 		}
@@ -67,8 +73,9 @@ public:
 		return 0;
 	}
 	std::wstring process(const std::wstring &input) {
-		if (m_regexes.size() == 0)
+		if (m_regexes.size() == 0) {
 			return input;
+		}
 		boost::wsmatch what;
 		for (std::vector<boost::wregex>::iterator it = m_regexes.begin();
 				it != m_regexes.end(); it++) {
@@ -82,5 +89,10 @@ public:
 		return L"";
 	}
 };
+
+}
+}
+}
+}
 
 #endif /* FILTER_H_ */

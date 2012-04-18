@@ -15,6 +15,7 @@
 
 #include <cstdio>
 
+namespace jovislab {
 namespace encoding {
 
 static boost::shared_ptr<boost::archive::detail::utf8_codecvt_facet> utf8_codec;
@@ -87,6 +88,7 @@ size_t exportAsUtf8(char *output, const wchar_t *input, size_t output_size,
 	return result_size;
 }
 
+}
 }
 
 #endif /* ENCODING_CPP_ */

@@ -32,15 +32,15 @@ namespace boost {
 //  A progress_timer behaves like a timer except that the destructor displays
 //  an elapsed time message at an appropriate place in an appropriate form.
 
-class progress_timer: public timer, private noncopyable {
+class wprogress_timer: public timer, private noncopyable {
 
 public:
-	explicit progress_timer(std::wostream & os = std::wcout)
+	explicit wprogress_timer(std::wostream & os = std::wcout)
 	// os is hint; implementation may ignore, particularly in embedded systems
 	:
 			m_os(os) {
 	}
-	~progress_timer() {
+	~wprogress_timer() {
 		//  A) Throwing an exception from a destructor is a Bad Thing.
 		//  B) The progress_timer destructor does output which may throw.
 		//  C) A progress_timer is usually not critical to the application.
@@ -55,10 +55,9 @@ public:
 			m_os.flags(old_flags);
 			m_os.precision(old_prec);
 		}
-
 		catch (...) {
 		} // eat any exceptions
-	} // ~progress_timer
+	} // ~wprogress_timer
 
 private:
 	std::wostream & m_os;
@@ -73,10 +72,10 @@ private:
 // found some compilers couldn't handle the required conversion to double.
 // Reverted to unsigned long until the compilers catch up.
 
-class progress_display: private noncopyable {
+class wprogress_display: private noncopyable {
 public:
-	explicit progress_display(unsigned long expected_count, std::wostream & os =
-			std::wcout, const std::wstring & s1 = L"\n", //leading strings
+	explicit wprogress_display(unsigned long expected_count, std::wostream & os =
+			std::wcout, const std::wstring & s1 = L"", //leading strings
 			const std::wstring & s2 = L"", const std::wstring & s3 = L"")
 	// os is hint; implementation may ignore, particularly in embedded systems
 	:
@@ -99,6 +98,18 @@ public:
 		if (!_expected_count)
 			_expected_count = 1; // prevent divide by zero
 	} // restart
+
+	~wprogress_display() {
+		//  A) Throwing an exception from a destructor is a Bad Thing.
+		//  B) The progress_timer destructor does output which may throw.
+		//  C) A progress_timer is usually not critical to the application.
+		//  Therefore, wrap the I/O in a try block, catch and ignore all exceptions.
+		try {
+			m_os << std::endl;
+		}
+		catch (...) {
+		} // eat any exceptions
+	} // ~wprogress_display
 
 	unsigned long operator+=(unsigned long increment)
 	//  Effects: Display appropriate progress tic if needed.
@@ -140,7 +151,7 @@ private:
 				static_cast<unsigned long>((_tic/50.0)*_expected_count);
 				if ( _count == _expected_count ) {
 					if ( _tic < 51 ) m_os << '*';
-					m_os << std::endl;
+					// m_os << std::endl;
 				}
 			} // display_tic
 		};

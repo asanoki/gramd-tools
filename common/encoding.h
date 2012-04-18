@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <exception>
 
+namespace jovislab {
 namespace encoding {
 
 const std::locale *getUtf8Locale();
@@ -27,11 +28,12 @@ size_t exportAsUtf8(char *output, const wchar_t *input, size_t output_size,
 		size_t input_size);
 
 class ConversionException: public std::exception {
-	const char* what() const throw() {
+	const char* what() const throw () {
 		return "Unable to perform conversion.";
 	}
 };
 
+}
 }
 
 #endif /* ENCODING_H_ */

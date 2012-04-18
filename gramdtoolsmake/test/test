@@ -1,8 +1,7 @@
 #!/bin/bash
 
+#export CPUPROFILE=/tmp/mybin.prof
 
-export CPUPROFILE=/tmp/mybin.prof
-
-../gramdtoolsmake -j 1 -r 2 --verbose --debug --output wp2txtdump.grams --filter wp2txtdump.filter /opt/home/fedora/Data/JAWIKI/extracted.txt
+../gramdtoolsmake -j 8 -r 3 --verbose --entry-size ES_10 --output wp2txtdump.grams --filter wp2txtdump.filter wp2txtdump.input
 #../gramdtoolsmake -j 1 -r 2 --verbose --debug --output wp2txtdump.grams --filter wp2txtdump.filter wp2txtdump.input
 #../gramdtoolsmake -j 1 --verbose --debug --output wp2txtdump.grams small.input

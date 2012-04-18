@@ -637,6 +637,7 @@ BOOST_SYSTEM_LDFLAGS
 BOOST_CPPFLAGS
 DISTCHECK_CONFIGURE_FLAGS
 BOOST_ROOT
+TCMALLOC_LDFLAGS
 am__fastdepCXX_FALSE
 am__fastdepCXX_TRUE
 CXXDEPMODE
@@ -766,6 +767,7 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 enable_dependency_tracking
+with_tcmalloc
 with_boost
 enable_static_boost
 '
@@ -1422,6 +1424,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
+  --with-tcmalloc         compile with tcmalloc
   --with-boost=DIR        prefix of Boost 1.34 [guess]
 
 Some influential environment variables:
@@ -14991,6 +14994,38 @@ fi
 
 
 
+
+# Check whether --with-tcmalloc was given.
+if test "${with_tcmalloc+set}" = set; then :
+  withval=$with_tcmalloc; TCMALLOC_LDFLAGS="-ltcmalloc_minimal"
+else
+  TCMALLOC_LDFLAGS=''
+fi
+
+
+
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "google/sparse_hash_map" "ac_cv_header_google_sparse_hash_map" "$ac_includes_default"
+if test "x$ac_cv_header_google_sparse_hash_map" = xyes; then :
+
+$as_echo "#define HAVE_GOOGLE_SPARSE_HASH_MAP /**/" >>confdefs.h
+
+fi
+
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
 echo "$as_me: this is boost.m4 serial 16" >&5
 boost_save_IFS=$IFS
 boost_version_req=1.34
@@ -15384,7 +15419,6 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-
 boost_threads_save_LIBS=$LIBS
 boost_threads_save_LDFLAGS=$LDFLAGS
 boost_threads_save_CPPFLAGS=$CPPFLAGS
@@ -15443,10 +15477,10 @@ if ${boost_cv_lib_system+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   boost_cv_lib_system=no
-  case "mt" in #(
+  case "" in #(
     mt | mt-) boost_mt=-mt; boost_rtopt=;; #(
-    mt* | mt-*) boost_mt=-mt; boost_rtopt=`expr "Xmt" : 'Xmt-*\(.*\)'`;; #(
-    *) boost_mt=; boost_rtopt=mt;;
+    mt* | mt-*) boost_mt=-mt; boost_rtopt=`expr "X" : 'Xmt-*\(.*\)'`;; #(
+    *) boost_mt=; boost_rtopt=;;
   esac
   if test $enable_static_boost = yes; then
     boost_rtopt="s$boost_rtopt"
@@ -15670,10 +15704,10 @@ if ${boost_cv_lib_thread+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   boost_cv_lib_thread=no
-  case "mt" in #(
+  case "" in #(
     mt | mt-) boost_mt=-mt; boost_rtopt=;; #(
-    mt* | mt-*) boost_mt=-mt; boost_rtopt=`expr "Xmt" : 'Xmt-*\(.*\)'`;; #(
-    *) boost_mt=; boost_rtopt=mt;;
+    mt* | mt-*) boost_mt=-mt; boost_rtopt=`expr "X" : 'Xmt-*\(.*\)'`;; #(
+    *) boost_mt=; boost_rtopt=;;
   esac
   if test $enable_static_boost = yes; then
     boost_rtopt="s$boost_rtopt"
@@ -16939,6 +16973,8 @@ fi
 
 
 
+
+LDFLAGS="$LDFLAGS $TCMALLOC_LDFLAGS"
 
 ac_config_files="$ac_config_files Makefile gramdtoolsmake/Makefile"
 

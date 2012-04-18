@@ -825,7 +825,8 @@ gramdtoolsmake-gramdtoolsmake.o: gramdtoolsmake.cpp \
  /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/functional \
  /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/tuple \
  /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/type_traits \
- /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/functional_hash.h
+ /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/functional_hash.h \
+ /usr/include/boost/array.hpp /usr/include/boost/swap.hpp storage_impl.h
 
 /usr/include/boost/program_options.hpp:
 
@@ -2630,3 +2631,9 @@ storage.h:
 /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/type_traits:
 
 /usr/lib/gcc/i686-redhat-linux/4.6.2/../../../../include/c++/4.6.2/tr1/functional_hash.h:
+
+/usr/include/boost/array.hpp:
+
+/usr/include/boost/swap.hpp:
+
+storage_impl.h:
